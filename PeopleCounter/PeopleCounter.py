@@ -33,7 +33,7 @@ while True:
     # Use built-in tracker
     imgRegion = cv2.bitwise_and(img, mask)
     imgGraphics = cv2.imread("graphics.png", cv2.IMREAD_UNCHANGED)
-    img = cvzone.overlayPNG(img, imgGraphics, (0, 0))
+    img = cvzone.overlayPNG(img, imgGraphics, (730, 260))
     results = model.track(imgRegion, persist=True, stream=True)
 
     for r in results:
