@@ -77,6 +77,16 @@ while True:
                 cx, cy = (x1 + w/2, y1 + h/2)
                 cv2.circle(img, (int(cx), int(cy)), 5, (255, 0, 255), cv2.FILLED)
 
+                if limitsUp[0] < cx < limitsUp[2] and limitsUp[1] -15 < cy < limitsUp[1] + 15:
+                    if totalUp.count(track_id) == 0:
+                        totalUp.append(track_id)
+                        cv2.line(img, (limitsUp[0], limitsUp[1]),(limitsUp[2], limitsUp[3]), (0, 255, 0), 5)
+
+                if limitsDown[0] < cx < limitsDown[2] and limitsDown[1] - 15 < cy < limitsDown[1] + 15:
+                    if totalDown.count(track_id) == 0:
+                        totalDown.append(track_id)
+                        cv2.line(img, (limitsDown[0], limitsDown[1]), (limitsDown[2], limitsDown[3]), (0, 255, 0), 5)
+
                 # Label
                 cvzone.putTextRect(
                     img,
@@ -89,8 +99,10 @@ while True:
                     colorR=(0, 0, 255)  # red rectangle
                 )
 
-                # cvzone.putTextRect(img, f' Count: {len(totalCount)}', (50, 50))
-                cv2.putText(img, str(len(total_people)), (255, 100), cv2.FONT_HERSHEY_PLAIN, 5, (50, 50, 255), 8)
+    # cvzone.putTextRect(img, f' Count: {len(totalCount)}', (50, 50))
+    cv2.putText(img, str(len(totalUp)), (929, 345), cv2.FONT_HERSHEY_PLAIN, 5, (50, 50, 255), 8)
+    # cvzone.putTextRect(img, f' Count: {len(totalCount)}', (50, 50))
+    cv2.putText(img, str(len(totalDown)), (1179, 345), cv2.FONT_HERSHEY_PLAIN, 5, (50, 50, 255), 8)
 
     cv2.imshow("Image", img)
     # cv2.imshow("ImageRegion", imgRegion)
@@ -105,8 +117,20 @@ annotated = results[0].plot() # get the image with boxes drawn
 # Label
 cvzone.putTextRect(
     annotated,
-    f'Total Cars Detected: {len(total_people)}',
+    f'Total People Going Up: {len(totalUp)}',
     (max(0, 220), max(35, 150)),
+     scale=1.4,
+     thickness=2,
+     offset=5,
+     colorT=(255, 255, 255),  # white text
+     colorR=(0, 0, 255)  # red rectangle
+      )
+
+# Label
+cvzone.putTextRect(
+    annotated,
+    f'Total People Going Down: {len(totalDown)}',
+    (max(0, 220), max(185, 300)),
      scale=1.4,
      thickness=2,
      offset=5,
