@@ -20,9 +20,15 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               ]
 mask = cv2.imread("mask.png")
 
+limitsUp = [103, 161, 296, 161]
+limitsDown = [529, 489, 735, 489]
+
+totalUp = []
+totalDown = []
+
 # Track unique IDs
 counted_ids = set()
-total_cars = 0
+total_people = []
 
 
 while True:
@@ -35,6 +41,9 @@ while True:
     imgGraphics = cv2.imread("graphics.png", cv2.IMREAD_UNCHANGED)
     img = cvzone.overlayPNG(img, imgGraphics, (730, 260))
     results = model.track(imgRegion, persist=True, stream=True)
+
+    cv2.line(img, (limitsUp[0], limitsUp[1]), (limitsUp[2], limitsUp[3]), (0,  0, 255), 5)
+    cv2.line(img, (limitsDown[0], limitsDown[1]), (limitsDown[2], limitsDown[3]), (0, 0, 255), 5)
 
     for r in results:
         if r.boxes.id is None:
@@ -56,19 +65,22 @@ while True:
             cls = int(box.cls[0])
             currentClass = classNames[cls]
 
-            if currentClass == "car" and conf > 0.3:
+            if currentClass == "person" and conf > 0.3:
                 # Count only once per unique ID
                 if track_id not in counted_ids:
                     counted_ids.add(track_id)
-                    total_cars += 1
+                    total_people.insert(track_id, total_people)
 
                 # Draw Box
                 cvzone.cornerRect(img, (x1, y1, w, h), l=6)
 
+                cx, cy = (x1 + w/2, y1 + h/2)
+                cv2.circle(img, (int(cx), int(cy)), 5, (255, 0, 255), cv2.FILLED)
+
                 # Label
                 cvzone.putTextRect(
                     img,
-                    f'{currentClass} | {conf} | Total: {total_cars}',
+                    f'{currentClass} | {conf} | Total: {len(total_people)}',
                     (max(0, x1), max(35, y1)),
                     scale=1.4,
                     thickness=2,
@@ -78,14 +90,14 @@ while True:
                 )
 
                 # cvzone.putTextRect(img, f' Count: {len(totalCount)}', (50, 50))
-                cv2.putText(img, str(total_cars), (255, 100), cv2.FONT_HERSHEY_PLAIN, 5, (50, 50, 255), 8)
+                cv2.putText(img, str(len(total_people)), (255, 100), cv2.FONT_HERSHEY_PLAIN, 5, (50, 50, 255), 8)
 
     cv2.imshow("Image", img)
     # cv2.imshow("ImageRegion", imgRegion)
     cv2.waitKey(1) # plays right through
     # cv2.waitKey(0) # plays frame and must press key to go to next frame
 
-print(total_cars)
+print(len(total_people))
 
 results = model("bg.png", show=True)
 annotated = results[0].plot() # get the image with boxes drawn
@@ -93,7 +105,7 @@ annotated = results[0].plot() # get the image with boxes drawn
 # Label
 cvzone.putTextRect(
     annotated,
-    f'Total Cars Detected: {total_cars}',
+    f'Total Cars Detected: {len(total_people)}',
     (max(0, 220), max(35, 150)),
      scale=1.4,
      thickness=2,
