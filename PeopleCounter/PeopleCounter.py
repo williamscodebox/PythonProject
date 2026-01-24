@@ -90,7 +90,8 @@ while True:
                 # Label
                 cvzone.putTextRect(
                     img,
-                    f'{currentClass} | {conf} | Total: {len(total_people)}',
+                    # f'{currentClass} | {conf} | Total: {len(total_people)}',
+                    f'{currentClass} | {conf}',
                     (max(0, x1), max(35, y1)),
                     scale=1.4,
                     thickness=2,
