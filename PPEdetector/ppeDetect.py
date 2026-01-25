@@ -3,7 +3,14 @@ import cv2
 import cvzone
 import math
 
-cap = cv2.VideoCapture("../Videos/ppe-1-1.mp4")
+cap = cv2.VideoCapture(0) # For Webcam
+cap.set(3, 1280)
+cap.set(4, 720)
+print(cap.get(3), cap.get(4))
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+
+# cap = cv2.VideoCapture("../Videos/ppe-1-1.mp4") # From Video
 
 model = YOLO("ppe.pt")
 
@@ -25,18 +32,18 @@ while True:
             cvzone.cornerRect(img, (x1, y1, w, h))
             # Confidence
             conf = math.ceil((box.conf[0]*100))/100
-            print(conf)
-            # Class Name
-            cls = int(box.cls[0])
-            cvzone.putTextRect(
-                img,
-                f'{classNames[cls]} {conf}',
-                (max(0, x1), max(35, y1)),
-                scale=1.5,
-                thickness=2,
-                colorT=(255, 255, 255),  # white text
-                colorR=(0, 0, 255)  # red rectangle
-            )
+            if conf > 0.5:
+                # Class Name
+                cls = int(box.cls[0])
+                cvzone.putTextRect(
+                    img,
+                    f'{classNames[cls]} {conf}',
+                    (max(0, x1), max(35, y1)),
+                    scale=1.5,
+                    thickness=2,
+                    colorT=(255, 255, 255),  # white text
+                    colorR=(0, 0, 255)  # red rectangle
+                )
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
