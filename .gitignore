@@ -4,3 +4,4 @@ requirements.txt
 External Libraries
 test.txt
 *.pt
+main.py
