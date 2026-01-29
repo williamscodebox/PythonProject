@@ -15,7 +15,7 @@ def main():
 
    # Train the model on GPU
    # model.train(data="coco.yaml", epochs=50, device='cuda')
-   model.train(data="./PlayingCards/data.yaml", epochs=50, device='cuda', amp=True, workers=0, batch=20)
+   model.train(data="./PlayingCards/data.yaml", epochs=50, device='cuda', amp=True, workers=0, batch=18)
    # Validate the model on GPU
    model.val(data="./PlayingCards/data.yaml", device='cuda')
 
