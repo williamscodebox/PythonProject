@@ -38,17 +38,22 @@ def find_poker_hand(hand):
         if 14 in sorted_ranks and 13 in sorted_ranks and 12 in sorted_ranks and 11 in sorted_ranks and 10 in sorted_ranks:
             # print("Royal Flush")
             possible_ranks.append(10)
+        # if sorted_ranks.
         # print("Flush")
-        possible_ranks.append(0)
+        possible_ranks.append(6)
     else:
-        print("")
+        possible_ranks.append(1)
         # print("Mix")
+    if not possible_ranks:
+        possible_ranks.append(1)
 
     # print(hand)
+    output = poker_hand_ranks[max(possible_ranks)]
     print(poker_hand_ranks[max(possible_ranks)])
-    return 0
+    return output
 
 if __name__ == '__main__':
     find_poker_hand(["AH","KH","QH","JH","10H"]) # Royal Flush
     find_poker_hand(["QC", "JC", "10C", "9C", "8C"])  # Straight Flush
+    find_poker_hand(["QC", "JD", "10C", "9C", "8C"])  # Straight Flush
 
