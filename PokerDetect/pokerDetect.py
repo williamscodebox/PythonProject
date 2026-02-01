@@ -12,7 +12,7 @@ print(cap.get(3), cap.get(4))
 
 # cap = cv2.VideoCapture("../Videos/ppe-1-1.mp4") # From Video
 
-model = YOLO("ppe.pt")
+model = YOLO("poker.pt")
 
 classNames = ['Excavator', 'Gloves', 'Hardhat', 'Ladder', 'Mask', 'NO-Hardhat', 'NO-Mask', 'NO-Safety Vest', 'Person', 'SUV', 'Safety Cone', 'Safety Vest', 'bus', 'dump truck', 'fire hydrant', 'machinery', 'mini-van', 'sedan', 'semi', 'trailer', 'truck and trailer', 'truck', 'van', 'vehicle', 'wheel loader']
 
