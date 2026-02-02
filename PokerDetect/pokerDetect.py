@@ -14,7 +14,9 @@ print(cap.get(3), cap.get(4))
 
 model = YOLO("poker.pt")
 
-classNames = ['Excavator', 'Gloves', 'Hardhat', 'Ladder', 'Mask', 'NO-Hardhat', 'NO-Mask', 'NO-Safety Vest', 'Person', 'SUV', 'Safety Cone', 'Safety Vest', 'bus', 'dump truck', 'fire hydrant', 'machinery', 'mini-van', 'sedan', 'semi', 'trailer', 'truck and trailer', 'truck', 'van', 'vehicle', 'wheel loader']
+classNames = ['10C', '10D', '10H', '10S', '2C', '2D', '2H', '2S', '3C', '3D', '3H', '3S', '4C', '4D', '4H', '4S', '5C', '5D', '5H', '5S', '6C', '6D', '6H', '6S', '7C', '7D', '7H', '7S', '8C', '8D', '8H', '8S', '9C', '9D', '9H', '9S', 'AC', 'AD', 'AH', 'AS', 'JC', 'JD', 'JH', 'JS', 'KC', 'KD', 'KH', 'KS', 'QC', 'QD', 'QH', 'QS']
+
+detected_cards = {} # persists across frames
 
 while True:
     success, img = cap.read()
@@ -23,6 +25,8 @@ while True:
     for r in results:
         boxes = r.boxes
         for box in boxes:
+
+
             # Bounding Box
             x1, y1, x2, y2 = box.xyxy[0]
             x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
@@ -35,6 +39,12 @@ while True:
             if conf > 0.5:
                 # Class Name
                 cls = int(box.cls[0])
+
+                label = classNames[cls]
+
+                # if label not in detected_cards or conf > detected_cards[label]["conf"]:
+                #     detected_cards[label] = {"conf": conf, "box": (x1, y1, x2, y2)}
+
                 cvzone.putTextRect(
                     img,
                     f'{classNames[cls]} {conf}',
@@ -44,6 +54,18 @@ while True:
                     colorT=(255, 255, 255),  # white text
                     colorR=(0, 0, 255)  # red rectangle
                 )
+    # Draw all stored cards every frame
+    # for label, data in detected_cards.items():
+    #     x1, y1, x2, y2 = data["box"]
+    #     cvzone.putTextRect(
+    #         img,
+    #         f'{label} {data["conf"]}',
+    #         (max(0, x1), max(35, y1)),
+    #         scale=1.5,
+    #         thickness=2,
+    #         colorT=(255, 255, 255),
+    #         colorR=(0, 0, 255)
+    #     )
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
