@@ -3,6 +3,8 @@ import cv2
 import cvzone
 import math
 
+from PokerDetect.pokerHand import find_poker_hand
+
 cap = cv2.VideoCapture(0) # For Webcam
 cap.set(3, 1280)
 cap.set(4, 720)
@@ -36,14 +38,14 @@ while True:
             cvzone.cornerRect(img, (x1, y1, w, h))
             # Confidence
             conf = math.ceil((box.conf[0]*100))/100
-            if conf > 0.5:
+            if conf > 0.85:
                 # Class Name
                 cls = int(box.cls[0])
 
                 label = classNames[cls]
 
-                # if label not in detected_cards or conf > detected_cards[label]["conf"]:
-                #     detected_cards[label] = {"conf": conf, "box": (x1, y1, x2, y2)}
+                if label not in detected_cards or conf > detected_cards[label]["conf"]:
+                     detected_cards[label] = {"conf": conf, "box": (x1, y1, x2, y2)}
 
                 cvzone.putTextRect(
                     img,
@@ -66,6 +68,13 @@ while True:
     #         colorT=(255, 255, 255),
     #         colorR=(0, 0, 255)
     #     )
+    print(len(detected_cards))
+    if len(detected_cards) == 5:
+        ph = find_poker_hand(detected_cards)
+        print(ph)
+        # poker_hand = []
+        # for label, data in detected_cards.items():
+        #     poker_hand.append(data.conf)
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
