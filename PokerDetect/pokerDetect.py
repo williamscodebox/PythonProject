@@ -72,6 +72,7 @@ while True:
     if len(detected_cards) == 5:
         ph = find_poker_hand(detected_cards)
         print(ph)
+        cvzone.putTextRect(img, f'{ph}', (400, 200), scale=5, thickness=3)
         # poker_hand = []
         # for label, data in detected_cards.items():
         #     poker_hand.append(data.conf)
